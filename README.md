@@ -5,7 +5,9 @@ Using Express.js and Vercel Serverless functions.
 
 ## Intention
 
-Express as a foundation, allows quick porting of existing applications. As well as the use of existing extensions from the Express ecosystem.
+As a foundation, Express enables the swift migration of pre-existing applications and also supports the utilization of existing extensions from the Express ecosystem.
+
+While Vercel's Serverless capabilities empower the utilization of the Vercel platform, offering a multitude of advantages such as the ability to run AWS Serverless functions in various regions, preview deployments, and versatile runtime protocols. Furthermore, it facilitates seamless integration with GitHub.
 
 ## Structure
 
