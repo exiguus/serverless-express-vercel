@@ -1,0 +1,7 @@
+#!/bin/bash
+. "$(dirname -- "$0")/_/husky.sh"
+
+pnpm lint-staged
+pnpm build:docs
+git add -f swagger.json
+git add -f public/

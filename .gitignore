@@ -1,0 +1,13 @@
+.cache
+.sw-tmp
+node_modules
+dist/
+.env
+.env.local
+.env.production
+.env.test
+.vercel
+swagger.json
+/test-results/
+/playwright-report/
+/playwright/.cache/

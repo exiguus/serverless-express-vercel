@@ -1,0 +1,156 @@
+<html DOCTYPE!>
+  <head>
+    <title>serverless-express-vercel</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        font-weight: 300;
+      }
+
+      body {
+        padding: 0px;
+        margin: 0px;
+        min-height: 100vh;
+        font-family: 'IBM Plex Mono', Menlo, 'DejaVu Sans Mono',
+          'Bitstream Vera Sans Mono', Courier, monospace;
+        font-weight: 300;
+        line-height: 1.4;
+        background-color: rgba(1, 24, 6, 0.8);
+        color: rgba(204, 204, 204, 0.8);
+      }
+
+      main,
+      nav,
+      header,
+      footer {
+        padding: 1rem;
+      }
+
+      main > * {
+        margin-bottom: 1rem;
+      }
+
+      form,
+      pre {
+        padding: 1rem;
+        border: 1px solid rgba(204, 204, 204, 0.8);
+      }
+
+      a:link,
+      a:hover,
+      a:active,
+      a:focus,
+      a:visited {
+        color: rgb(204, 204, 204);
+      }
+
+      nav ul li {
+        margin-left: 2rem;
+      }
+
+      footer ul li {
+        display: inline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1 data-testid="name">serverless-express-vercel</h1>
+      <h2 data-testid="version">Version: 1.0.0</h2>
+    </header>
+    <nav>
+      <h1 data-testid="documentation">Documentation</h1>
+      <ul>
+        <li><a data-testid="redoc" href="/redoc">Redoc</a></li>
+        <li><a data-testid="swagger" href="/swagger">Swagger</a></li>
+      </ul>
+    </nav>
+    <main>
+      <p data-testid="description">Track Serverless API for gattner.name</p>
+      <form id="form">
+        <caption>
+          Get Track
+        </caption>
+        <label for="token">Token</label>
+        <input id="token" type="text" name="token" value="" />
+        <button type="submit">Submit</button>
+      </form>
+      <pre></pre>
+    </main>
+    <footer>
+      <ul>
+        <li>
+          <a
+            data-testid="repository"
+            href="https://github.com/exiguus/serverless-express-vercel.git"
+            >git</a
+          >
+        </li>
+        <li>
+          <a data-testid="author" href="https://gattner.name/">Simon Gattner</a>
+        </li>
+      </ul>
+    </footer>
+  </body>
+  <script>
+    'use strict';
+    window.onload = function () {
+      const token = window.localStorage.getItem('token');
+      if (token && token.length > 0) {
+        document.getElementById('token').value = token;
+      }
+      getTrack();
+
+      const form = document.getElementById('form');
+      form.addEventListener('submit', getTrack);
+    };
+
+    function getTrack(event) {
+      if (event) {
+        event.preventDefault();
+      }
+      const token = document.getElementById('token').value || '';
+      console.log({token});
+
+      if (token && token.length > 0) {
+        window.localStorage.setItem('token', token);
+
+        fetch('/api/track', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.querySelector('pre').innerHTML = JSON.stringify(
+              data || '',
+              null,
+              2,
+            );
+          })
+          .catch((error) => {
+            document.querySelector('pre').innerHTML = JSON.stringify(
+              {error},
+              null,
+              2,
+            );
+          });
+      } else {
+        document.querySelector('pre').innerHTML = JSON.stringify(
+          {
+            form: {message: 'No token provided'},
+          },
+          null,
+          2,
+        );
+      }
+    }
+  </script>
+</html>

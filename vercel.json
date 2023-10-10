@@ -1,0 +1,29 @@
+{
+  "functions": {
+    "api/index.ts": {
+      "memory": 1024,
+      "maxDuration": 10,
+      "includeFiles": "{{src,public}/**,{src,public}/**/**,package.json,node_modules/{ajv,apicache,axios,compression,cors,dotenv,express,express-jwt}/**,node_modules/{ajv,apicache,axios,compression,cors,dotenv,express,express-jwt}/**/**,}",
+      "excludeFiles": "{src/**/*.test.ts,src/**/**/.test.ts}"
+    }
+  },
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/swagger/",
+      "destination": "/swagger/index.html"
+    },
+    {
+      "source": "/redoc/",
+      "destination": "/redoc/index.html"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "api/index.ts"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

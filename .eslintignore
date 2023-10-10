@@ -1,0 +1,8 @@
+node_modules
+**/dist/**
+**/out/**
+**/data/**
+**/.cache/**
+**/coverage/**
+**/swagger/**
+**/redoc/**

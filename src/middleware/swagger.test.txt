@@ -1,0 +1,17 @@
+import express from 'express';
+import swagger from './swagger';
+import request from 'supertest';
+
+describe('middleware swagger', () => {
+  test('get swagger', () => {
+    const app = express();
+    swagger(app);
+
+    return request(app)
+      .get('/swagger/')
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toStrictEqual({});
+      });
+  });
+});

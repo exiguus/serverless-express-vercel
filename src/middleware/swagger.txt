@@ -1,0 +1,36 @@
+import {Express} from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../../swagger.json';
+import Package from '../../package.json';
+
+const swagger = (app: Express) => {
+  const options = {
+    explorer: true,
+    info: {
+      title: Package.name,
+      version: Package.version,
+      description: Package.description,
+    },
+    host: `${process.env.SERVER_POTOCOL}://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
+    swaggerOptions: {
+      // Fix Swagger UI not showing authorization header in the correct format:
+      //  Before: Authorization:
+      //    <token>
+      //  After: Authorization:
+      //    Bearer <token>
+      // See: https://stackoverflow.com/questions/32910065/how-to-use-authorization-bearer-token-in-a-swagger-spec
+      requestInterceptor: (req: {headers: {Authorization: string}}) => {
+        req.headers.Authorization = 'Bearer ' + req.headers.Authorization;
+        return req;
+      },
+    },
+  };
+
+  app.use(
+    '/swagger',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, options),
+  );
+};
+
+export default swagger;

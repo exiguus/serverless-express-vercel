@@ -1,0 +1,58 @@
+name: E2E
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test_setup:
+    name: Test Setup
+    runs-on: ubuntu-latest
+    outputs:
+      preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
+      production_url: ${{ steps.waitForVercelProductionDeployment.outputs.url || env.VERCEL_DEPLOYMENT_URL }}
+    steps:
+      - name: Wait for Vercel preview deployment to be ready
+        if: github.event_name == 'pull_request'
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForVercelPreviewDeployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 900
+          environment: Preview – serverless-express-vercel
+      - name: Wait for Vercel production deployment to be ready
+        if: github.event_name == 'push'
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForVercelProductionDeployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 900
+          environment: Production – serverless-express-vercel
+
+  test_run:
+    needs: test_setup
+    name: Test run
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm i
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+      - name: Run Playwright tests
+        run: pnpm e2e
+        env:
+          E2E_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url || needs.test_setup.outputs.production_url }}
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
