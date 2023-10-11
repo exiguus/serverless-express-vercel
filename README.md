@@ -73,6 +73,7 @@ serverless on  main [!] is 📦 v1.0.0 via  v18.16.0 via 💎 v3.0.0
   - JWT [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - Testing
   - Unit Test [jest](https://jestjs.io/)
+  - SuperTest [supertest](https://github.com/ladjs/supertest#readme)
   - E2E Test [playwright](https://playwright.dev/)
 - Development
   - TypeScript [typescript](https://www.typescriptlang.org/)
