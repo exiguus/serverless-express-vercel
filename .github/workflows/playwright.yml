@@ -10,9 +10,17 @@ on:
     paths:
       - 'api/**'
       - 'src/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to test against'
+        required: true
+        default: 'https://sev.gattner.app/'
+        type: string
 
 jobs:
   test_setup:
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
     name: Test Setup
     runs-on: ubuntu-latest
     outputs:
@@ -55,7 +63,7 @@ jobs:
       - name: Run Playwright tests
         run: pnpm e2e
         env:
-          E2E_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url || needs.test_setup.outputs.production_url }}
+          E2E_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url || needs.test_setup.outputs.production_url || env.PROD_URL}}
       - uses: actions/upload-artifact@v3
         if: always()
         with:
