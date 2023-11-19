@@ -46,10 +46,14 @@ jobs:
 
   test_run:
     needs: test_setup
+    if: always()
     name: Test run
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
+      - name: fail if no url is available to test against in non-manual runs
+        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && needs.test_setup.outputs.preview_url == '' && needs.test_setup.outputs.production_url == '' }}
+        run: exit 1
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
@@ -63,7 +67,7 @@ jobs:
       - name: Run Playwright tests
         run: pnpm e2e
         env:
-          E2E_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url || needs.test_setup.outputs.production_url || env.PROD_URL}}
+          E2E_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url || needs.test_setup.outputs.production_url || inputs.environment}}
       - uses: actions/upload-artifact@v3
         if: always()
         with:
