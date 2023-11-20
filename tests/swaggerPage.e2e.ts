@@ -1,16 +1,14 @@
 import {test, expect} from '@playwright/test';
 
-const baseURL = `${process.env.SERVER_PROTOCOL}://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
-
 test('has swagger', async ({page}) => {
-  await page.goto(baseURL);
+  await page.goto('/');
   await page.getByTestId('swagger').click();
-  await page.waitForURL(`${baseURL}/swagger/`);
+  await page.waitForURL(`/swagger/`);
   await expect(page).toHaveTitle('Swagger UI');
 });
 
 test('has api tag list', async ({page}) => {
-  await page.goto(`${baseURL}/swagger/`);
+  await page.goto(`/swagger/`);
 
   expect(await page.getByRole('heading', {name: 'cache'})).toBeTruthy();
   expect(await page.getByRole('heading', {name: 'info'})).toBeTruthy();
@@ -18,6 +16,6 @@ test('has api tag list', async ({page}) => {
 });
 
 test('has models', async ({page}) => {
-  await page.goto(`${baseURL}/swagger`);
+  await page.goto(`/swagger`);
   expect(await page.getByRole('heading', {name: 'Models'})).toBeTruthy();
 });

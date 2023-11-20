@@ -2,7 +2,7 @@ import {test, expect} from '@playwright/test';
 
 // Request context is reused by all tests in the file.
 let apiContext;
-const baseURL = `${process.env.SERVER_PROTOCOL}://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
+const baseURL = `${process.env.E2E_TEST_BASE_URL}`;
 
 test.afterEach(async () => {
   // Dispose responses.

@@ -15,7 +15,7 @@ on:
       environment:
         description: 'Environment to test against'
         required: true
-        default: 'https://sev.gattner.app/'
+        default: 'https://sev.gattner.app'
         type: string
 
 jobs:
@@ -68,6 +68,7 @@ jobs:
         run: pnpm e2e
         env:
           E2E_TEST_BASE_URL: ${{ needs.test_setup.outputs.preview_url || needs.test_setup.outputs.production_url || inputs.environment}}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:

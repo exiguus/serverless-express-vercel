@@ -1,16 +1,13 @@
 import {test, expect} from '@playwright/test';
 import config from '../package.json';
-
-const baseURL = `${process.env.SERVER_PROTOCOL}://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
-
 test('has title', async ({page}) => {
-  await page.goto(baseURL);
+  await page.goto('/');
 
   await expect(page).toHaveTitle(`${config.name} - ${config.description}`);
 });
 
 test('has heading', async ({page}) => {
-  await page.goto(baseURL);
+  await page.goto('/');
 
   expect(await page.getByTestId('name').textContent()).toBe(config.name);
   expect(await page.getByTestId('description').textContent()).toBe(
@@ -22,7 +19,7 @@ test('has heading', async ({page}) => {
 });
 
 test('has content', async ({page}) => {
-  await page.goto(baseURL);
+  await page.goto('/');
 
   expect(await page.getByTestId('documentation').textContent()).toBe(
     'Documentation',
@@ -36,7 +33,7 @@ test('has content', async ({page}) => {
 });
 
 test('has footer', async ({page}) => {
-  await page.goto(baseURL);
+  await page.goto('/');
 
   expect(await page.getByTestId('author').textContent()).toBe(
     config.author['name'],

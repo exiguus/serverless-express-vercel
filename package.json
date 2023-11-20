@@ -30,6 +30,7 @@
     "test": "pnpm test:unit",
     "test:unit": "DEBUG=disabled dotenv -e .env -- pnpm jest",
     "e2e": "dotenv -e .env -- pnpm playwright test",
+    "e2e:prod:ui": "dotenv -e .env.test -- playwright test --ui",
     "e2e:prod": "dotenv -e .env.test -- pnpm playwright test",
     "prepare": "husky install"
   },
